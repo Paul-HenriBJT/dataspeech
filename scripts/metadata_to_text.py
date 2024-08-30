@@ -184,7 +184,7 @@ def estimate_gender_from_pitch(pitch_values, low_threshold=120, high_threshold=1
     elif avg_pitch > high_threshold:
         return 'female'
     else:
-        return 'Undetermined'
+        return 'male'
     
 if __name__ == "__main__":
     set_start_method("spawn")
