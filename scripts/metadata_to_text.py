@@ -112,12 +112,22 @@ def speaker_level_relative_to_gender(dataset, text_bins, speaker_column_name, ge
             list_data.append(panda_data)
         
     dataframe = pd.concat(list_data, ignore_index=True)
+    
+    # Check if gender column exists
+    if gender_column_name not in dataframe.columns:
+        print(f"Warning: '{gender_column_name}' column not found. Estimating gender from {column_name}.")
+        dataframe['estimated_gender'] = dataframe.groupby(speaker_column_name)[column_name].transform(
+            lambda x: estimate_gender_from_pitch(x)
+        )
+        gender_column_name = 'estimated_gender'
+    
     dataframe = dataframe.groupby(speaker_column_name).agg({column_name: "mean", gender_column_name: "first"})
+    
     if bin_edges is None:
         bin_edges = {}
         if save_dir is not None:
             save_dict = {}
-            save_dict_afer_filtering = {}
+            save_dict_after_filtering = {}
         for category in ["male", "female"]:
             values = dataframe[dataframe[gender_column_name] == category][column_name]
             values = np.array(values)
@@ -127,13 +137,13 @@ def speaker_level_relative_to_gender(dataset, text_bins, speaker_column_name, ge
                 # filter out outliers
                 values = values[np.abs(values - np.mean(values)) < std_tolerance * np.std(values)]
                 if save_dir is not None:
-                    save_dict_afer_filtering[category] = values
+                    save_dict_after_filtering[category] = values
             bin_edges[category] = np.histogram(values, len(text_bins))[1]
         
         if save_dir is not None:
             visualize_bins_to_text(save_dict["male"], save_dict["female"], "Male distribution", "Female distribution", text_bins, save_dir, output_column_name)
             if std_tolerance is not None:
-                visualize_bins_to_text(save_dict_afer_filtering["male"], save_dict_afer_filtering["female"], "Male distribution", "Female distribution", text_bins, save_dir, f"{output_column_name}_after_filtering")
+                visualize_bins_to_text(save_dict_after_filtering["male"], save_dict_after_filtering["female"], "Male distribution", "Female distribution", text_bins, save_dir, f"{output_column_name}_after_filtering")
 
         if only_save_plot:
             return dataset, bin_edges
@@ -150,11 +160,32 @@ def speaker_level_relative_to_gender(dataset, text_bins, speaker_column_name, ge
         return {
             output_column_name: batch_bins
         }
-        
     
     dataset = [df.map(batch_association, batched=True, input_columns=[speaker_column_name], batch_size=batch_size, num_proc=num_workers) for df in dataset]
     return dataset, bin_edges
 
+
+def estimate_gender_from_pitch(pitch_values, low_threshold=120, high_threshold=180):
+    """
+    Estimate gender based on average pitch.
+    
+    Args:
+    pitch_values (array-like): Array of pitch values in Hz
+    low_threshold (float): Lower threshold for distinguishing (default 120 Hz)
+    high_threshold (float): Upper threshold for distinguishing (default 180 Hz)
+    
+    Returns:
+    str: Estimated gender ('Male', 'Female', or 'Undetermined')
+    """
+    avg_pitch = np.mean(pitch_values)
+    
+    if avg_pitch < low_threshold:
+        return 'Male'
+    elif avg_pitch > high_threshold:
+        return 'Female'
+    else:
+        return 'Undetermined'
+    
 if __name__ == "__main__":
     set_start_method("spawn")
     parser = argparse.ArgumentParser()
