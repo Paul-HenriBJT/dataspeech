@@ -180,9 +180,9 @@ def estimate_gender_from_pitch(pitch_values, low_threshold=120, high_threshold=1
     avg_pitch = np.mean(pitch_values)
     
     if avg_pitch < low_threshold:
-        return 'Male'
+        return 'male'
     elif avg_pitch > high_threshold:
-        return 'Female'
+        return 'female'
     else:
         return 'Undetermined'
     
