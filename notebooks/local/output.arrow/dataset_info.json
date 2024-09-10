@@ -1,0 +1,118 @@
+{
+  "builder_name": "arrow",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "temp",
+  "dataset_size": 15786285,
+  "description": "",
+  "download_checksums": {
+    "/Users/paul-henri/Documents/QS/dataspeech/datasets/temp/data/data-00001-of-00011.arrow": {
+      "num_bytes": 15820568,
+      "checksum": null
+    }
+  },
+  "download_size": 15820568,
+  "features": {
+    "original_path": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "begin_time": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "end_time": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "audio_duration": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "speaker_id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "chapter_id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "file": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "utterance_pitch_mean": {
+      "dtype": "float32",
+      "_type": "Value"
+    },
+    "utterance_pitch_std": {
+      "dtype": "float32",
+      "_type": "Value"
+    },
+    "snr": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "c50": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "speaking_rate": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "phonemes": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "gender": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "pitch": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "noise": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "reverberation": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "speech_monotony": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "text_description": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 31606853,
+  "splits": {
+    "data": {
+      "name": "data",
+      "num_bytes": 15786285,
+      "num_examples": 22785,
+      "dataset_name": "temp"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

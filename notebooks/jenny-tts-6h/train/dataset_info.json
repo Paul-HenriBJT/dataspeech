@@ -1,0 +1,61 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "jenny-tts-6h",
+  "dataset_size": 1016477031,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/ylacombe/jenny-tts-6h@11fc97effd75c1b55ea96726b375f4a60621ab54/data/train-00000-of-00003.parquet": {
+      "num_bytes": 325557699,
+      "checksum": null
+    },
+    "hf://datasets/ylacombe/jenny-tts-6h@11fc97effd75c1b55ea96726b375f4a60621ab54/data/train-00001-of-00003.parquet": {
+      "num_bytes": 371309910,
+      "checksum": null
+    },
+    "hf://datasets/ylacombe/jenny-tts-6h@11fc97effd75c1b55ea96726b375f4a60621ab54/data/train-00002-of-00003.parquet": {
+      "num_bytes": 319413664,
+      "checksum": null
+    }
+  },
+  "download_size": 1016281273,
+  "features": {
+    "file_name": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "transcription": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "transcription_normalised": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "audio": {
+      "_type": "Audio"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 2032758304,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 1016477031,
+      "num_examples": 4000,
+      "shard_lengths": [
+        2034,
+        1966
+      ],
+      "dataset_name": "jenny-tts-6h"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

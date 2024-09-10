@@ -1,0 +1,500 @@
+09/04/2024 19:06:56 - WARNING - __main__ - Process rank: 0, device: mps, n_gpu: 1, distributed training: False, 16-bits training: False
+09/04/2024 19:06:56 - INFO - __main__ - Training/evaluation parameters ParlerTTSTrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+audio_encoder_per_device_batch_size=10,
+auto_find_batch_size=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+compute_clap_similarity_metric=True,
+compute_noise_level_metric=True,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=2,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=False,
+do_predict=False,
+do_train=False,
+dtype=float32,
+eval_accumulation_steps=None,
+eval_dataloader_num_workers=0,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.NO,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./output_dir_preprocessing/runs/Sep04_19-06-54_Paul-Henris-MBP,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+noise_level_to_compute_clean_wer=25,
+num_train_epochs=3.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=./output_dir_preprocessing/,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+predict_with_generate=False,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard', 'wandb'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=./output_dir_preprocessing/,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=IntervalStrategy.STEPS,
+save_total_limit=None,
+seed=456,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+09/04/2024 19:06:57 - WARNING - __main__ - Disabling fast tokenizer warning: https://github.com/huggingface/transformers/blob/main/src/transformers/tokenization_utils_base.py#L3231-L3235
+loading configuration file preprocessor_config.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--dac_44khZ_8kbps/snapshots/db52bea859d9411e0beb44a3ea923a8731ee4197/preprocessor_config.json
+Feature extractor EncodecFeatureExtractor {
+  "chunk_length_s": null,
+  "feature_extractor_type": "EncodecFeatureExtractor",
+  "feature_size": 1,
+  "overlap": null,
+  "padding_side": "right",
+  "padding_value": 0.0,
+  "return_attention_mask": true,
+  "sampling_rate": 44100
+}
+loading file spiece.model from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/spiece.model
+loading file tokenizer.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/tokenizer.json
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/special_tokens_map.json
+loading file tokenizer_config.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/tokenizer_config.json
+You set `add_prefix_space`. The tokenizer needs to be converted from the slow tokenizers
+loading file spiece.model from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/spiece.model
+loading file tokenizer.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/tokenizer.json
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/special_tokens_map.json
+loading file tokenizer_config.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/tokenizer_config.json
+loading configuration file config.json from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/config.json
+Model config ParlerTTSConfig {
+  "_name_or_path": "/fsx/yoach/tmp/artefacts/training-400M-punctuated-v2/",
+  "architectures": [
+    "ParlerTTSForConditionalGeneration"
+  ],
+  "audio_encoder": {
+    "_name_or_path": "ylacombe/dac_44khZ_8kbps",
+    "add_cross_attention": false,
+    "architectures": [
+      "DACModel"
+    ],
+    "bad_words_ids": null,
+    "begin_suppress_tokens": null,
+    "bos_token_id": null,
+    "chunk_size_feed_forward": 0,
+    "codebook_size": 1024,
+    "cross_attention_hidden_size": null,
+    "decoder_start_token_id": null,
+    "diversity_penalty": 0.0,
+    "do_sample": false,
+    "early_stopping": false,
+    "encoder_no_repeat_ngram_size": 0,
+    "eos_token_id": null,
+    "exponential_decay_length_penalty": null,
+    "finetuning_task": null,
+    "forced_bos_token_id": null,
+    "forced_eos_token_id": null,
+    "frame_rate": 86,
+    "id2label": {
+      "0": "LABEL_0",
+      "1": "LABEL_1"
+    },
+    "is_decoder": false,
+    "is_encoder_decoder": false,
+    "label2id": {
+      "LABEL_0": 0,
+      "LABEL_1": 1
+    },
+    "latent_dim": 1024,
+    "length_penalty": 1.0,
+    "max_length": 20,
+    "min_length": 0,
+    "model_bitrate": 8,
+    "model_type": "dac",
+    "no_repeat_ngram_size": 0,
+    "num_beam_groups": 1,
+    "num_beams": 1,
+    "num_codebooks": 9,
+    "num_return_sequences": 1,
+    "output_attentions": false,
+    "output_hidden_states": false,
+    "output_scores": false,
+    "pad_token_id": null,
+    "prefix": null,
+    "problem_type": null,
+    "pruned_heads": {},
+    "remove_invalid_values": false,
+    "repetition_penalty": 1.0,
+    "return_dict": true,
+    "return_dict_in_generate": false,
+    "sampling_rate": 44100,
+    "sep_token_id": null,
+    "suppress_tokens": null,
+    "task_specific_params": null,
+    "temperature": 1.0,
+    "tf_legacy_loss": false,
+    "tie_encoder_decoder": false,
+    "tie_word_embeddings": true,
+    "tokenizer_class": null,
+    "top_k": 50,
+    "top_p": 1.0,
+    "torch_dtype": "float32",
+    "torchscript": false,
+    "typical_p": 1.0,
+    "use_bfloat16": false
+  },
+  "decoder": {
+    "_name_or_path": "/fsx/yoach/tmp/artefacts/decoder_400M/",
+    "activation_dropout": 0.0,
+    "activation_function": "gelu",
+    "add_cross_attention": true,
+    "architectures": [
+      "ParlerTTSForCausalLM"
+    ],
+    "attention_dropout": 0.0,
+    "bad_words_ids": null,
+    "begin_suppress_tokens": null,
+    "bos_token_id": 1025,
+    "chunk_size_feed_forward": 0,
+    "cross_attention_hidden_size": null,
+    "cross_attention_implementation_strategy": null,
+    "decoder_start_token_id": null,
+    "diversity_penalty": 0.0,
+    "do_sample": false,
+    "dropout": 0.1,
+    "early_stopping": false,
+    "encoder_no_repeat_ngram_size": 0,
+    "eos_token_id": 1024,
+    "exponential_decay_length_penalty": null,
+    "ffn_dim": 4096,
+    "finetuning_task": null,
+    "forced_bos_token_id": null,
+    "forced_eos_token_id": null,
+    "hidden_size": 1024,
+    "id2label": {
+      "0": "LABEL_0",
+      "1": "LABEL_1"
+    },
+    "initializer_factor": 0.02,
+    "is_decoder": true,
+    "is_encoder_decoder": false,
+    "label2id": {
+      "LABEL_0": 0,
+      "LABEL_1": 1
+    },
+    "layerdrop": 0.0,
+    "length_penalty": 1.0,
+    "max_length": 20,
+    "max_position_embeddings": 4096,
+    "min_length": 0,
+    "model_type": "parler_tts_decoder",
+    "no_repeat_ngram_size": 0,
+    "num_attention_heads": 16,
+    "num_beam_groups": 1,
+    "num_beams": 1,
+    "num_codebooks": 9,
+    "num_cross_attention_key_value_heads": 16,
+    "num_hidden_layers": 24,
+    "num_key_value_heads": 16,
+    "num_return_sequences": 1,
+    "output_attentions": false,
+    "output_hidden_states": false,
+    "output_scores": false,
+    "pad_token_id": 1024,
+    "prefix": null,
+    "problem_type": null,
+    "pruned_heads": {},
+    "remove_invalid_values": false,
+    "repetition_penalty": 1.0,
+    "return_dict": true,
+    "return_dict_in_generate": false,
+    "rope_embeddings": false,
+    "rope_theta": 10000.0,
+    "scale_embedding": false,
+    "sep_token_id": null,
+    "suppress_tokens": null,
+    "task_specific_params": null,
+    "temperature": 1.0,
+    "tf_legacy_loss": false,
+    "tie_encoder_decoder": false,
+    "tie_word_embeddings": false,
+    "tokenizer_class": null,
+    "top_k": 50,
+    "top_p": 1.0,
+    "torch_dtype": "float32",
+    "torchscript": false,
+    "typical_p": 1.0,
+    "use_bfloat16": false,
+    "use_cache": true,
+    "vocab_size": 1088
+  },
+  "decoder_start_token_id": 1025,
+  "is_encoder_decoder": true,
+  "model_type": "parler_tts",
+  "pad_token_id": 1024,
+  "prompt_cross_attention": false,
+  "text_encoder": {
+    "_name_or_path": "google/flan-t5-base",
+    "add_cross_attention": false,
+    "architectures": [
+      "T5ForConditionalGeneration"
+    ],
+    "bad_words_ids": null,
+    "begin_suppress_tokens": null,
+    "bos_token_id": null,
+    "chunk_size_feed_forward": 0,
+    "classifier_dropout": 0.0,
+    "cross_attention_hidden_size": null,
+    "d_ff": 2048,
+    "d_kv": 64,
+    "d_model": 768,
+    "decoder_start_token_id": 0,
+    "dense_act_fn": "gelu_new",
+    "diversity_penalty": 0.0,
+    "do_sample": false,
+    "dropout_rate": 0.1,
+    "early_stopping": false,
+    "encoder_no_repeat_ngram_size": 0,
+    "eos_token_id": 1,
+    "exponential_decay_length_penalty": null,
+    "feed_forward_proj": "gated-gelu",
+    "finetuning_task": null,
+    "forced_bos_token_id": null,
+    "forced_eos_token_id": null,
+    "id2label": {
+      "0": "LABEL_0",
+      "1": "LABEL_1"
+    },
+    "initializer_factor": 1.0,
+    "is_decoder": false,
+    "is_encoder_decoder": true,
+    "is_gated_act": true,
+    "label2id": {
+      "LABEL_0": 0,
+      "LABEL_1": 1
+    },
+    "layer_norm_epsilon": 1e-06,
+    "length_penalty": 1.0,
+    "max_length": 20,
+    "min_length": 0,
+    "model_type": "t5",
+    "n_positions": 512,
+    "no_repeat_ngram_size": 0,
+    "num_beam_groups": 1,
+    "num_beams": 1,
+    "num_decoder_layers": 12,
+    "num_heads": 12,
+    "num_layers": 12,
+    "num_return_sequences": 1,
+    "output_attentions": false,
+    "output_hidden_states": false,
+    "output_past": true,
+    "output_scores": false,
+    "pad_token_id": 0,
+    "prefix": null,
+    "problem_type": null,
+    "pruned_heads": {},
+    "relative_attention_max_distance": 128,
+    "relative_attention_num_buckets": 32,
+    "remove_invalid_values": false,
+    "repetition_penalty": 1.0,
+    "return_dict": true,
+    "return_dict_in_generate": false,
+    "sep_token_id": null,
+    "suppress_tokens": null,
+    "task_specific_params": {
+      "summarization": {
+        "early_stopping": true,
+        "length_penalty": 2.0,
+        "max_length": 200,
+        "min_length": 30,
+        "no_repeat_ngram_size": 3,
+        "num_beams": 4,
+        "prefix": "summarize: "
+      },
+      "translation_en_to_de": {
+        "early_stopping": true,
+        "max_length": 300,
+        "num_beams": 4,
+        "prefix": "translate English to German: "
+      },
+      "translation_en_to_fr": {
+        "early_stopping": true,
+        "max_length": 300,
+        "num_beams": 4,
+        "prefix": "translate English to French: "
+      },
+      "translation_en_to_ro": {
+        "early_stopping": true,
+        "max_length": 300,
+        "num_beams": 4,
+        "prefix": "translate English to Romanian: "
+      }
+    },
+    "temperature": 1.0,
+    "tf_legacy_loss": false,
+    "tie_encoder_decoder": false,
+    "tie_word_embeddings": false,
+    "tokenizer_class": null,
+    "top_k": 50,
+    "top_p": 1.0,
+    "torch_dtype": null,
+    "torchscript": false,
+    "typical_p": 1.0,
+    "use_bfloat16": false,
+    "use_cache": true,
+    "vocab_size": 32128
+  },
+  "torch_dtype": "float32",
+  "transformers_version": "4.43.3",
+  "vocab_size": 32128
+}
+loading weights file model.safetensors from cache at /Users/paul-henri/.cache/huggingface/hub/models--parler-tts--parler_tts_mini_v0.1/snapshots/e02fd18e77d38b49a85c7a9a85189a64b8472544/model.safetensors
+Generate config GenerationConfig {
+  "decoder_start_token_id": 1025,
+  "pad_token_id": 1024
+}
+/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:134: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Generate config GenerationConfig {
+  "bos_token_id": 1025,
+  "eos_token_id": 1024,
+  "pad_token_id": 1024
+}
+Traceback (most recent call last):
+  File "/Users/paul-henri/Documents/QS/parler-tts/training/run_parler_tts_training.py", line 1190, in <module>
+    main()
+  File "/Users/paul-henri/Documents/QS/parler-tts/training/run_parler_tts_training.py", line 331, in main
+    model = ParlerTTSForConditionalGeneration.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 2371, in from_pretrained
+    return super().from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/transformers/modeling_utils.py", line 3788, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 2250, in __init__
+    decoder = ParlerTTSForCausalLM(config.decoder)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 1713, in __init__
+    self.model = ParlerTTSModel(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 1633, in __init__
+    self.decoder = ParlerTTSDecoder(config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 1269, in __init__
+    self.post_init()
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1381, in post_init
+    self.init_weights()
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2277, in init_weights
+    self.apply(self._initialize_weights)
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/torch/nn/modules/module.py", line 895, in apply
+    module.apply(fn)
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/torch/nn/modules/module.py", line 895, in apply
+    module.apply(fn)
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/torch/nn/modules/module.py", line 895, in apply
+    module.apply(fn)
+  [Previous line repeated 1 more time]
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/torch/nn/modules/module.py", line 896, in apply
+    fn(self)
+  File "/Users/paul-henri/Documents/QS/dataspeech/env_dataspeech/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1785, in _initialize_weights
+    self._init_weights(module)
+  File "/Users/paul-henri/Documents/QS/dataspeech/notebooks/local/parler-tts/parler_tts/modeling_parler_tts.py", line 982, in _init_weights
+    module.weight.data.normal_(mean=0.0, std=std)
+KeyboardInterrupt

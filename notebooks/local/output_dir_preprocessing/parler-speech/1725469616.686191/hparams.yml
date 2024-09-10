@@ -1,0 +1,16 @@
+adam_beta1: 0.9
+adam_beta2: 0.999
+freeze_text_encoder: false
+global_batch_size: 8
+gradient_accumulation_steps: 1
+learning_rate: 5.0e-05
+lr_scheduler_type: !!python/object/apply:transformers.trainer_utils.SchedulerType
+- linear
+max_duration_in_seconds: 20.0
+mixed_precision: 'no'
+model_name_or_path: parler-tts/parler_tts_mini_v0.1
+num_train_epochs: 3.0
+per_device_train_batch_size: 8
+temperature: 1.0
+warmup_steps: 0
+weight_decay: 0.0

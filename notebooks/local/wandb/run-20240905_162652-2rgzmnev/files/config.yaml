@@ -1,0 +1,87 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.12.5
+    cli_version: 0.17.8
+    framework: huggingface
+    huggingface_version: 4.43.3
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1725546412
+    t:
+      1:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 100
+      2:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 100
+      3:
+      - 23
+      4: 3.12.5
+      5: 0.17.8
+      6: 4.43.3
+      8:
+      - 4
+      - 5
+      13: darwin-arm64
+learning_rate:
+  desc: null
+  value: 5.0e-05
+model_name_or_path:
+  desc: null
+  value: parler-tts/parler_tts_mini_v0.1
+num_train_epochs:
+  desc: null
+  value: 3.0
+gradient_accumulation_steps:
+  desc: null
+  value: 1
+per_device_train_batch_size:
+  desc: null
+  value: 8
+global_batch_size:
+  desc: null
+  value: 8
+mixed_precision:
+  desc: null
+  value: 'no'
+lr_scheduler_type:
+  desc: null
+  value: LINEAR
+warmup_steps:
+  desc: null
+  value: 0
+freeze_text_encoder:
+  desc: null
+  value: false
+max_duration_in_seconds:
+  desc: null
+  value: 20.0
+weight_decay:
+  desc: null
+  value: 0.0
+adam_beta1:
+  desc: null
+  value: 0.9
+adam_beta2:
+  desc: null
+  value: 0.999
+temperature:
+  desc: null
+  value: 1.0

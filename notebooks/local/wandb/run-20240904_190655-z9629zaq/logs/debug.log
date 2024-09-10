@@ -1,0 +1,28 @@
+2024-09-04 19:06:55,733 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Current SDK version is 0.17.8
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Configure stats pid to 62982
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Loading settings from /Users/paul-henri/.config/wandb/settings
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Loading settings from /Users/paul-henri/Documents/QS/dataspeech/notebooks/local/wandb/settings
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Loading settings from environment variables: {}
+2024-09-04 19:06:55,734 WARNING MainThread:62982 [wandb_setup.py:_flush():77] Could not save program above cwd: /Users/paul-henri/Documents/QS/parler-tts/training/run_parler_tts_training.py
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Inferring run settings from compute environment: {'program_relpath': None, 'program_abspath': '/Users/paul-henri/Documents/QS/parler-tts/training/run_parler_tts_training.py', 'program': '/Users/paul-henri/Documents/QS/parler-tts/training/run_parler_tts_training.py'}
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Applying login settings: {'api_key': '***REDACTED***'}
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Applying login settings: {'api_key': '***REDACTED***'}
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:_log_setup():524] Logging user logs to /Users/paul-henri/Documents/QS/dataspeech/notebooks/local/wandb/run-20240904_190655-z9629zaq/logs/debug.log
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:_log_setup():525] Logging internal logs to /Users/paul-henri/Documents/QS/dataspeech/notebooks/local/wandb/run-20240904_190655-z9629zaq/logs/debug-internal.log
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:init():607] calling init triggers
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:init():614] wandb.init called with sweep_config: {}
+config: {}
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:init():657] starting backend
+2024-09-04 19:06:55,734 INFO    MainThread:62982 [wandb_init.py:init():661] setting up manager
+2024-09-04 19:06:55,737 INFO    MainThread:62982 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-09-04 19:06:55,738 INFO    MainThread:62982 [wandb_init.py:init():669] backend started and connected
+2024-09-04 19:06:55,742 INFO    MainThread:62982 [wandb_init.py:init():767] updated telemetry
+2024-09-04 19:06:55,759 INFO    MainThread:62982 [wandb_init.py:init():800] communicating run to backend with 90.0 second timeout
+2024-09-04 19:06:56,106 INFO    MainThread:62982 [wandb_init.py:init():851] starting run threads in backend
+2024-09-04 19:06:56,678 INFO    MainThread:62982 [wandb_run.py:_console_start():2463] atexit reg
+2024-09-04 19:06:56,678 INFO    MainThread:62982 [wandb_run.py:_redirect():2309] redirect: wrap_raw
+2024-09-04 19:06:56,679 INFO    MainThread:62982 [wandb_run.py:_redirect():2374] Wrapping output streams.
+2024-09-04 19:06:56,679 INFO    MainThread:62982 [wandb_run.py:_redirect():2399] Redirects installed.
+2024-09-04 19:06:56,680 INFO    MainThread:62982 [wandb_init.py:init():894] run started, returning control to user process
+2024-09-04 19:06:56,687 INFO    MainThread:62982 [wandb_run.py:_config_callback():1392] config_cb None None {'learning_rate': 5e-05, 'model_name_or_path': 'parler-tts/parler_tts_mini_v0.1', 'num_train_epochs': 3.0, 'gradient_accumulation_steps': 1, 'per_device_train_batch_size': 8, 'global_batch_size': 8, 'mixed_precision': 'no', 'lr_scheduler_type': 'LINEAR', 'warmup_steps': 0, 'freeze_text_encoder': False, 'max_duration_in_seconds': 20.0, 'weight_decay': 0.0, 'adam_beta1': 0.9, 'adam_beta2': 0.999, 'temperature': 1.0}
