@@ -1,10 +1,11 @@
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, DatasetDict
 from dataclasses import dataclass, field
 from transformers import HfArgumentParser
 from tqdm import tqdm
 import asyncio
 import aiohttp
 from typing import List, Dict
+import re
 
 PROMPT = """You will be given six descriptive keywords related to an audio sample of a person's speech. These keywords include:
 1. The gender (e.g., male, female)
@@ -28,12 +29,8 @@ class DatasetArguments:
         metadata={"help": "OpenAI API key"},
     )
     output_dir: str = field(
-        default="output.arrow",
-        metadata={"help": "Output file name (Arrow format)"},
-    )
-    push_to_hub: bool = field(
-        default=False,
-        metadata={"help": "Whether to push the results to the Hugging Face Hub"},
+        default="output",
+        metadata={"help": "Output directory for Arrow files"},
     )
     batch_size: int = field(
         default=100,
@@ -43,6 +40,14 @@ class DatasetArguments:
         default=False,
         metadata={"help": "Whether to run in test mode (process only first 200 lines)"},
     )
+    repo_id: str = field(
+        default=None,
+        metadata={"help": "Repository ID to push the dataset to the Hugging Face Hub"},
+    )
+    language: str = field(
+        default=None,
+        metadata={"help": "Language of the speaker to be included in the description"},
+    )
 
 def create_prompt(example: Dict[str, str], expected_columns: List[str]) -> str:
     prompt = PROMPT
@@ -51,7 +56,17 @@ def create_prompt(example: Dict[str, str], expected_columns: List[str]) -> str:
             prompt = prompt.replace(f"[{column}]", example[column])
     return prompt
 
-async def process_batch(session: aiohttp.ClientSession, batch: List[str], api_key: str) -> List[str]:
+def replace_gender_with_language(text: str, language: str) -> str:
+    def replace_word(match):
+        word = match.group(0)
+        if word.lower().startswith(language.lower()):
+            return word
+        return f'{language} {word.lstrip("a ").lstrip("an ")}'
+
+    pattern = r'\b(a |an )?(man|woman|male|female)\b'
+    return re.sub(pattern, replace_word, text, flags=re.IGNORECASE)
+
+async def process_batch(session: aiohttp.ClientSession, batch: List[str], api_key: str, language: str) -> List[str]:
     async def process_prompt(prompt: str) -> str:
         url = "https://api.openai.com/v1/chat/completions"
         headers = {
@@ -67,46 +82,57 @@ async def process_batch(session: aiohttp.ClientSession, batch: List[str], api_ke
         }
         async with session.post(url, headers=headers, json=data) as response:
             result = await response.json()
-            return result['choices'][0]['message']['content']
+            description = result['choices'][0]['message']['content']
+            return replace_gender_with_language(description, language)
 
     tasks = [process_prompt(prompt) for prompt in batch]
     return await asyncio.gather(*tasks)
+
+async def process_split(split_name: str, split_dataset: Dataset, data_args: DatasetArguments) -> Dataset:
+    # Create the prompts
+    EXPECTED_COLUMNS = {"gender", "pitch", "noise", "reverberation", "speech_monotony", "speaking_rate"}
+    prompts = [create_prompt(example, EXPECTED_COLUMNS) for example in split_dataset]
+
+    # Send the prompts to the OpenAI API in batches
+    results = []
+    async with aiohttp.ClientSession() as session:
+        for i in tqdm(range(0, len(prompts), data_args.batch_size), desc=f"Processing {split_name}"):
+            batch = prompts[i:i+data_args.batch_size]
+            batch_results = await process_batch(session, batch, data_args.openai_api_key, data_args.language)
+            results.extend(batch_results)
+
+    # Add the new column to the dataset
+    return split_dataset.add_column("text_description", results)
 
 async def main():
     parser = HfArgumentParser((DatasetArguments))
     data_args = parser.parse_args_into_dataclasses()[0]
 
+    if data_args.language is None:
+        raise ValueError("The 'language' argument must be provided.")
+
     # 1. Load the dataset
-    dataset = load_dataset(data_args.dataset_name)['data']
+    dataset = load_dataset(data_args.dataset_name)
 
     # 2. Limit to first 200 lines if in test mode
     if data_args.test_mode:
-        dataset = dataset.select(range(200))
-        print("Running in test mode: processing only the first 200 lines")
+        dataset = dataset.select(range(min(200, len(dataset))))
+        print("Running in test mode: processing only the first 200 lines (or less if the dataset is smaller)")
 
-    # 3. Create the prompts
-    EXPECTED_COLUMNS = {"gender", "pitch", "noise", "reverberation", "speech_monotony", "speaking_rate"}
-    prompts = [create_prompt(example, EXPECTED_COLUMNS) for example in dataset]
+    # 3. Process each split
+    new_dataset = DatasetDict()
+    for split_name, split_dataset in dataset.items():
+        new_split = await process_split(split_name, split_dataset, data_args)
+        new_dataset[split_name] = new_split
 
-    # 4. Send the prompts to the OpenAI API in batches
-    results = []
-    async with aiohttp.ClientSession() as session:
-        for i in tqdm(range(0, len(prompts), data_args.batch_size), desc="Processing batches"):
-            batch = prompts[i:i+data_args.batch_size]
-            batch_results = await process_batch(session, batch, data_args.openai_api_key)
-            results.extend(batch_results)
-
-    # 5. Add the new column to the dataset
-    new_dataset: Dataset = dataset.add_column("text_description", results)
-
-    # 6. Save the results as an Arrow file
+    # 4. Save the results as Arrow files
     new_dataset.save_to_disk(data_args.output_dir)
     print(f"Results saved to {data_args.output_dir}")
 
     # Option to send it to the hub
-    if data_args.push_to_hub:
-        new_dataset.push_to_hub(f"{data_args.dataset_name}-analyzed")
-        print(f"Results pushed to the Hugging Face Hub: {data_args.dataset_name}-analyzed")
+    if data_args.repo_id:
+        new_dataset.push_to_hub(data_args.repo_id)
+        print(f"Results pushed to the Hugging Face Hub: {data_args.repo_id}")
 
 if __name__ == "__main__":
     asyncio.run(main())

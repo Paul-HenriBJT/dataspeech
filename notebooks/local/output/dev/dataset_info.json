@@ -1,0 +1,150 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "cml-tts-5percent-subset-annotated",
+  "dataset_size": 3668547,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/PHBJT/cml-tts-5percent-subset-annotated@7aae6a1e3864be54399811a83e7b1f2fca15e77d/data/train-00000-of-00001.parquet": {
+      "num_bytes": 1825898,
+      "checksum": null
+    },
+    "hf://datasets/PHBJT/cml-tts-5percent-subset-annotated@7aae6a1e3864be54399811a83e7b1f2fca15e77d/data/dev-00000-of-00001.parquet": {
+      "num_bytes": 73281,
+      "checksum": null
+    },
+    "hf://datasets/PHBJT/cml-tts-5percent-subset-annotated@7aae6a1e3864be54399811a83e7b1f2fca15e77d/data/test-00000-of-00001.parquet": {
+      "num_bytes": 74760,
+      "checksum": null
+    }
+  },
+  "download_size": 1973939,
+  "features": {
+    "wav_filesize": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "transcript_wav2vec": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "levenshtein": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "duration": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "num_words": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "speaker_id": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "utterance_pitch_mean": {
+      "dtype": "float32",
+      "_type": "Value"
+    },
+    "utterance_pitch_std": {
+      "dtype": "float32",
+      "_type": "Value"
+    },
+    "snr": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "c50": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "speaking_rate": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "phonemes": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "stoi": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "si-sdr": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "pesq": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "gender": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "pitch": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "noise": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "reverberation": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "speech_monotony": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sdr_noise": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "pesq_speech_quality": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "text_description": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 5642486,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 3441868,
+      "num_examples": 5379,
+      "dataset_name": "cml-tts-5percent-subset-annotated"
+    },
+    "dev": {
+      "name": "dev",
+      "num_bytes": 110820,
+      "num_examples": 186,
+      "dataset_name": "cml-tts-5percent-subset-annotated"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 115859,
+      "num_examples": 188,
+      "dataset_name": "cml-tts-5percent-subset-annotated"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
