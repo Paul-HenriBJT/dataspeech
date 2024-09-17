@@ -6,6 +6,8 @@ import asyncio
 import aiohttp
 from typing import List, Dict
 import re
+from asyncio import Semaphore
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 PROMPT = """You will be given six descriptive keywords related to an audio sample of a person's speech. These keywords include:
 1. The gender (e.g., male, female)
@@ -66,42 +68,75 @@ def replace_gender_with_language(text: str, language: str) -> str:
     pattern = r'\b(a |an )?(man|woman|male|female)\b'
     return re.sub(pattern, replace_word, text, flags=re.IGNORECASE)
 
-async def process_batch(session: aiohttp.ClientSession, batch: List[str], api_key: str, language: str) -> List[str]:
+async def process_batch(session: aiohttp.ClientSession, batch: List[str], api_key: str, language: str, semaphore: Semaphore) -> List[str]:
+    @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(5))
     async def process_prompt(prompt: str) -> str:
-        url = "https://api.openai.com/v1/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-        data = {
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                {"role": "system", "content": "You are an AI assistant that analyzes audio characteristics."},
-                {"role": "user", "content": prompt}
-            ]
-        }
-        async with session.post(url, headers=headers, json=data) as response:
-            result = await response.json()
-            description = result['choices'][0]['message']['content']
-            return replace_gender_with_language(description, language)
+        async with semaphore:
+            url = "https://api.openai.com/v1/chat/completions"
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            data = {
+                "model": "gpt-3.5-turbo",
+                "messages": [
+                    {"role": "system", "content": "You are an AI assistant that analyzes audio characteristics."},
+                    {"role": "user", "content": prompt}
+                ]
+            }
+
+            try:
+                async with session.post(url, headers=headers, json=data, timeout=8) as response:
+                    if response.status != 200:
+                        print(f"Error response: {response.status}")
+                        raise Exception(f"API request failed with status {response.status}")
+
+                    result = await response.json()
+
+                    description = result['choices'][0]['message']['content']
+                    return replace_gender_with_language(description, language)
+            except asyncio.TimeoutError:
+                print("Request timed out")
+                raise
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
+                raise
 
     tasks = [process_prompt(prompt) for prompt in batch]
-    return await asyncio.gather(*tasks)
+    
+    print(f"Processing batch of size {len(batch)}")
+    
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    
+    # Handle any exceptions
+    processed_results = []
+    for result in results:
+        if isinstance(result, Exception):
+            print(f"Error in batch: {str(result)}")
+            processed_results.append("Error: Failed to process")
+        else:
+            processed_results.append(result)
+    
+    print(f"Batch processed with results: {processed_results}")
+    
+    return processed_results
 
 async def process_split(split_name: str, split_dataset: Dataset, data_args: DatasetArguments) -> Dataset:
-    # Create the prompts
     EXPECTED_COLUMNS = {"gender", "pitch", "noise", "reverberation", "speech_monotony", "speaking_rate"}
     prompts = [create_prompt(example, EXPECTED_COLUMNS) for example in split_dataset]
 
-    # Send the prompts to the OpenAI API in batches
     results = []
+    semaphore = Semaphore(data_args.batch_size)  # Limit concurrent requests
     async with aiohttp.ClientSession() as session:
+        print(f"Starting to process split: {split_name}, Total Prompts: {len(prompts)}")
         for i in tqdm(range(0, len(prompts), data_args.batch_size), desc=f"Processing {split_name}"):
             batch = prompts[i:i+data_args.batch_size]
-            batch_results = await process_batch(session, batch, data_args.openai_api_key, data_args.language)
+            print(f"Processing batch from index {i} to {i + len(batch)}")
+            batch_results = await process_batch(session, batch, data_args.openai_api_key, data_args.language, semaphore)
+            print(f"Batch results: {batch_results}")
             results.extend(batch_results)
 
-    # Add the new column to the dataset
+    print(f"Adding text_description column to split: {split_name}")
     return split_dataset.add_column("text_description", results)
 
 async def main():

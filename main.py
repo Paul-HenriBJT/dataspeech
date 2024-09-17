@@ -25,7 +25,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers_per_gpu_for_snr", default=1, type=int, help="Number of workers per GPU for the SNR and reverberation estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
     parser.add_argument("--apply_squim_quality_estimation", action="store_true", help="If set, will also use torchaudio-squim estimation (SI-SNR, STOI and PESQ).")
     parser.add_argument("--num_workers_per_gpu_for_squim", default=1, type=int, help="Number of workers per GPU for the SI-SNR, STOI and PESQ estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
-
+    parser.add_argument("--hub_token", default=None, type=str, help="Hugging Face API token.")
 
     args = parser.parse_args()
     
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     if args.repo_id:
         print("Pushing to the hub...")
         if args.configuration:
-            dataset.push_to_hub(args.repo_id, args.configuration)
+            dataset.push_to_hub(args.repo_id, args.configuration, token=args.hub_token)
         else:
-            dataset.push_to_hub(args.repo_id)
+            dataset.push_to_hub(args.repo_id, token=args.hub_token)
     
