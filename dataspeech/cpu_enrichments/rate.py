@@ -1,7 +1,7 @@
 from phonemizer import phonemize
 from phonemizer.backend import EspeakBackend
 
-backend = EspeakBackend('de', language_switch='remove-flags')
+backend = EspeakBackend('nl', language_switch='remove-flags')
 
 def rate_apply(batch, rank=None, audio_column_name="audio", text_column_name="text"):
     if isinstance(batch[text_column_name], list):  
