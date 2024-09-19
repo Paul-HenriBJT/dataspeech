@@ -6,7 +6,10 @@ from multiprocessing import set_start_method
 
 def apply_punctuation(examples, model, text_column):
     restored_texts = [model.restore_punctuation(text) for text in examples[text_column]]
-    return {"restored_" + text_column: restored_texts}
+    return {
+        f"original_{text_column}": examples[text_column],
+        text_column: restored_texts
+    }
 
 if __name__ == "__main__":
     set_start_method("spawn")
@@ -33,11 +36,11 @@ if __name__ == "__main__":
         dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers)
 
     # Initialize the punctuation model
-    if args.language.lower() not in {"english", "italian", "french", "german", "dutch", "catalan"}:
+    if args.language and args.language.lower() not in {"english", "italian", "french", "german", "dutch", "catalan"}:
         raise ValueError(f"Language {args.language} is not supported. Please choose from: english, italian, french, german, dutch, catalan")
-    elif args.language.lower() == "catalan":    
+    elif args.language and args.language.lower() == "catalan":    
         model = PunctuationModel(model=f"softcatala/fullstop-catalan-punctuation-prediction")
-    elif args.language.lower() == "dutch":
+    elif args.language and args.language.lower() == "dutch":
         model = PunctuationModel(model="oliverguhr/fullstop-dutch-punctuation-prediction")
     else:
         model = PunctuationModel(model=f"oliverguhr/fullstop-punctuation-multilang-large")
