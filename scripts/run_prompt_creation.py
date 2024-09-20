@@ -460,7 +460,7 @@ def main():
                     data_args.dataset_config_name,
                     split=split,
                     cache_dir=model_args.cache_dir,
-                    token=model_args.token,
+                    token=data_args.hub_token,
                     num_proc=data_args.preprocessing_num_workers,
                 )
     else:
@@ -470,7 +470,7 @@ def main():
                 data_args.dataset_name,
                 data_args.dataset_config_name,
                 cache_dir=model_args.cache_dir,
-                token=model_args.token,
+                token=data_args.hub_token,
                 num_proc=data_args.preprocessing_num_workers,
             )
 
@@ -522,7 +522,7 @@ def main():
         device_map=get_kbit_device_map() if quantization_config is not None else None,
         quantization_config=quantization_config,
         low_cpu_mem_usage=True,
-        token=model_args.token,
+        token=data_args.hub_token,
     ).eval()
 
     if model_args.torch_compile:
