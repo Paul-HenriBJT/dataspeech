@@ -52,10 +52,7 @@ def predict_gender(audio, model, feature_extractor, device):
 
 def main(args):
     # Load the dataset
-    if args.configuration:
-        dataset = load_dataset(args.dataset_name, args.configuration)
-    else:
-        dataset = load_dataset(args.dataset_name)
+    dataset = load_dataset(args.dataset_name, args.configuration)
 
     # Model configuration
     model_name_or_path = "alefiury/wav2vec2-large-xlsr-53-gender-recognition-librispeech"
@@ -98,7 +95,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Predict gender for each speaker and output to CSV.")
     parser.add_argument("dataset_name", type=str, help="Name or path of the dataset.")
-    parser.add_argument("--configuration", type=str, default=None, help="Dataset configuration to use.")
+    parser.add_argument("--configuration", type=str, default=None, help="Dataset configuration to use. If not specified, fetches the entire dataset.")
     parser.add_argument("--audio_column", type=str, default="audio", help="Name of the column containing audio data for classification.")
     parser.add_argument("--speaker_column", type=str, default="speaker_id", help="Name of the column containing speaker IDs.")
     parser.add_argument("--output_file", type=str, default=None, help="Path to save the output CSV file.")
