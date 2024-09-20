@@ -1,87 +1,109 @@
-import os
 import argparse
+import torch
+import torchaudio
+import pandas as pd
 from datasets import load_dataset
 from transformers import AutoFeatureExtractor, AutoModelForAudioClassification
-import torch
-from torch.utils.data import DataLoader
-import torchaudio
-import numpy as np
+from tqdm import tqdm
 
-def process_audio(audio, feature_extractor, sampling_rate=16000, max_length=5):
-    if isinstance(audio, dict) and 'array' in audio and 'sampling_rate' in audio:
+def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5):
+    if isinstance(audio, dict):
         speech_array = torch.tensor(audio['array'])
         sr = audio['sampling_rate']
-    elif isinstance(audio, np.ndarray):
-        speech_array = torch.tensor(audio)
-        sr = sampling_rate
     else:
-        raise ValueError("Unsupported audio format")
+        speech_array, sr = torchaudio.load(audio)
 
-    if speech_array.dim() > 1:
-        speech_array = speech_array.mean(dim=0)
+    # Ensure speech_array is 2D: (channels, time)
+    if speech_array.dim() == 1:
+        speech_array = speech_array.unsqueeze(0)
+
+    # Convert to mono if it's multi-channel
+    if speech_array.shape[0] > 1:
+        speech_array = torch.mean(speech_array, dim=0, keepdim=True)
 
     if sr != sampling_rate:
-        resampler = torchaudio.transforms.Resample(sr, sampling_rate)
-        speech_array = resampler(speech_array)
+        transform = torchaudio.transforms.Resample(sr, sampling_rate)
+        speech_array = transform(speech_array)
 
-    # Pad or truncate
-    target_length = max_length * sampling_rate
-    if speech_array.shape[0] < target_length:
-        speech_array = torch.nn.functional.pad(speech_array, (0, target_length - speech_array.shape[0]))
+    # Get the length of the audio
+    len_audio = speech_array.shape[1]
+
+    if len_audio < max_audio_len * sampling_rate:
+        padding = torch.zeros(1, max_audio_len * sampling_rate - len_audio)
+        speech_array = torch.cat([speech_array, padding], dim=1)
     else:
-        speech_array = speech_array[:target_length]
+        speech_array = speech_array[:, :max_audio_len * sampling_rate]
 
-    inputs = feature_extractor(speech_array, sampling_rate=sampling_rate, return_tensors="pt")
+    speech_array = speech_array.squeeze().numpy()
+
+    inputs = feature_extractor(
+        speech_array, 
+        sampling_rate=sampling_rate, 
+        return_tensors="pt", 
+        padding=True
+    )
+
     return inputs
 
 def predict_gender(audio, model, feature_extractor, device):
-    try:
-        inputs = process_audio(audio, feature_extractor)
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-        with torch.no_grad():
-            outputs = model(**inputs)
-        probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)
-        predicted_class_id = probabilities.argmax().item()
-        return model.config.id2label[predicted_class_id]
-    except Exception as e:
-        print(f"Error processing audio: {e}")
-        return "unknown"
+    inputs = process_audio(audio, feature_extractor)
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    with torch.no_grad():
+        logits = model(**inputs).logits
+        predicted_class_id = logits.argmax().item()
+
+    return predicted_class_id
 
 def main(args):
     # Load the dataset
     dataset = load_dataset(args.dataset_name, args.configuration)
-    
-    # Load the model and feature extractor
-    model_name = "alefiury/wav2vec2-large-xlsr-53-gender-recognition-librispeech"
-    feature_extractor = AutoFeatureExtractor.from_pretrained(model_name)
-    model = AutoModelForAudioClassification.from_pretrained(model_name)
-    
+
+    # Model configuration
+    model_name_or_path = "alefiury/wav2vec2-large-xlsr-53-gender-recognition-librispeech"
+    label2id = {"female": 0, "male": 1}
+    id2label = {0: "F", 1: "M"}
+    num_labels = 2
+
+    # Initialize the feature extractor and model
+    feature_extractor = AutoFeatureExtractor.from_pretrained(model_name_or_path)
+    model = AutoModelForAudioClassification.from_pretrained(
+        pretrained_model_name_or_path=model_name_or_path,
+        num_labels=num_labels,
+        label2id=label2id,
+        id2label=id2label,
+    )
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
-
-    def process_and_add_gender(example):
-        gender = predict_gender(example['audio'], model, feature_extractor, device)
-        example['gender'] = gender
-        return example
+    model.eval()
 
     # Process the dataset
-    dataset = dataset.map(process_and_add_gender, num_proc=args.cpu_num_workers)
+    speaker_data = []
+    for split in dataset:
+        # Group by speaker ID and get the first audio sample for each speaker
+        speakers = dataset[split].unique(args.speaker_column)
+        for speaker in tqdm(speakers, desc=f"Processing {split} split"):
+            speaker_samples = dataset[split].filter(lambda x: x[args.speaker_column] == speaker)
+            first_sample = speaker_samples[0]
+            
+            audio = first_sample[args.audio_column]
+            prediction = predict_gender(audio, model, feature_extractor, device)
+            speaker_data.append({"speaker_id": speaker, "sex": id2label[prediction]})
 
-    # Save and push to hub if specified
-    if args.output_dir:
-        dataset.save_to_disk(args.output_dir)
-    
-    if args.repo_id:
-        dataset.push_to_hub(args.repo_id, token=args.hub_token)
+    # Create a DataFrame and save as CSV
+    df = pd.DataFrame(speaker_data)
+    csv_path = args.output_file or "speaker_gender.csv"
+    df.to_csv(csv_path, index=False)
+    print(f"CSV file saved to {csv_path}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("dataset_name", type=str, help="Repo id or local path of the dataset.")
-    parser.add_argument("--configuration", default=None, type=str, help="Dataset configuration to use.")
-    parser.add_argument("--output_dir", default=None, type=str, help="If specified, save the dataset on disk.")
-    parser.add_argument("--repo_id", default=None, type=str, help="If specified, push the model to the hub.")
-    parser.add_argument("--cpu_num_workers", default=1, type=int, help="Number of CPU workers for data processing.")
-    parser.add_argument("--hub_token", default=None, type=str, help="Hugging Face API token.")
+    parser = argparse.ArgumentParser(description="Predict gender for each speaker and output to CSV.")
+    parser.add_argument("dataset_name", type=str, help="Name or path of the dataset.")
+    parser.add_argument("--configuration", type=str, default=None, help="Dataset configuration to use.")
+    parser.add_argument("--audio_column", type=str, default="audio", help="Name of the column containing audio data for classification.")
+    parser.add_argument("--speaker_column", type=str, default="speaker_id", help="Name of the column containing speaker IDs.")
+    parser.add_argument("--output_file", type=str, default=None, help="Path to save the output CSV file.")
 
     args = parser.parse_args()
     main(args)
