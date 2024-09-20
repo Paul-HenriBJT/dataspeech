@@ -52,7 +52,8 @@ def predict_gender(audio, model, feature_extractor, device):
 
 def main(args):
     # Load the dataset
-    dataset = load_dataset(args.dataset_name, args.configuration)
+
+    dataset = load_dataset(args.dataset_name, args.configuration) if args.configuration else load_dataset(args.dataset_name)
 
     # Model configuration
     model_name_or_path = "alefiury/wav2vec2-large-xlsr-53-gender-recognition-librispeech"
