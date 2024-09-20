@@ -112,10 +112,6 @@ class DataArguments:
     """
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
-    hub_token: Optional[str] = field(
-        default=None,
-        metadata={"help": "Hugging Face API token."},
-    )
     output_dir: str = field(
         metadata={
             "help": "Where to save the processed dataset to disk. If unspecified, uses a 'pretty' version of the "
@@ -191,6 +187,10 @@ class DataArguments:
     )
     accent_column: Optional[str] = field(
         default=None, metadata={"help": "Accent column name, if any."}
+    )
+    hub_token: Optional[str] = field(
+        default=None,
+        metadata={"help": "Hugging Face API token."},
     )
 
 
