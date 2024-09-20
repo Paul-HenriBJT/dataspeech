@@ -2,6 +2,7 @@ import argparse
 import torch
 import torchaudio
 import pandas as pd
+import os
 from datasets import load_dataset
 from transformers import AutoFeatureExtractor, AutoModelForAudioClassification
 from tqdm import tqdm
@@ -99,6 +100,10 @@ def main(args):
     # Create a DataFrame and save as CSV
     df = pd.DataFrame(speaker_data)
     csv_path = args.output_file or "speaker_gender.csv"
+
+    # Create the directory if it doesn't exist
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+
     df.to_csv(csv_path, index=False)
     print(f"CSV file saved to {csv_path}")
 
