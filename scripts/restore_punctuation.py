@@ -39,8 +39,8 @@ if __name__ == "__main__":
         dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers)
 
     # Initialize the punctuation model
-    if args.language and args.language.lower() not in {"english", "german", "french", "spanish", "bulgarian", "italian", "polish", "dutch", "czech", "portugese", "slovak", "slovenian"}:
-        raise ValueError(f"Language {args.language} is not supported. Please choose from: english, italian, french, german, dutch, catalan")
+    if args.language and args.language.lower() not in {"catalan","english", "german", "french", "spanish", "bulgarian", "italian", "polish", "dutch", "czech", "portuguese", "slovak", "slovenian"}:
+        raise ValueError(f"Language {args.language} is not supported. Please choose from: english, german, french, spanish, bulgarian, italian, polish, dutch, czech, portuguese, slovak, slovenian, catalan")
     elif args.language and args.language.lower() == "catalan":    
         model = PunctuationModel(model=f"softcatala/fullstop-catalan-punctuation-prediction")
     elif args.language and args.language.lower() == "dutch":
