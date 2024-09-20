@@ -27,9 +27,9 @@ if __name__ == "__main__":
         
     speaker_id_column_name = args.speaker_id_column_name
 
-    speaker_dataset = pd.read_csv(args.tsv_path, sep="|", on_bad_lines='skip')
-    speaker_column = ' SPEAKER   ' 
-    gender_column = '   GENDER   '
+    speaker_dataset = pd.read_csv(args.tsv_path, sep=";", on_bad_lines='skip')
+    speaker_column = 'SPEAKER'
+    gender_column = 'GENDER'
     speaker_dataset = speaker_dataset.set_index(speaker_column)[gender_column]
     speaker_dataset = speaker_dataset.to_dict()
     

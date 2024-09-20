@@ -112,7 +112,10 @@ class DataArguments:
     """
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
-
+    hub_token: Optional[str] = field(
+        default=None,
+        metadata={"help": "Hugging Face API token."},
+    )
     output_dir: str = field(
         metadata={
             "help": "Where to save the processed dataset to disk. If unspecified, uses a 'pretty' version of the "
@@ -658,7 +661,7 @@ def main():
             vectorized_datasets.push_to_hub(
                 data_args.hub_dataset_id,
                 config_name=data_args.dataset_config_name if data_args.dataset_config_name is not None else "default",
-                token=model_args.token,
+                token=data_args.hub_token,
             )
     accelerator.wait_for_everyone()
     accelerator.end_training()
