@@ -542,6 +542,7 @@ def main():
         trust_remote_code=model_args.trust_remote_code,
         use_fast=model_args.use_fast_tokenizer,
         padding_side="left",
+        token=data_args.hub_token
     )
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.bos_token_id
