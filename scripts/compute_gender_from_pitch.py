@@ -5,6 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 from transformers import AutoFeatureExtractor, AutoModelForAudioClassification
 from tqdm import tqdm
+from collections import defaultdict
 
 def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5):
     if isinstance(audio, dict):
@@ -81,13 +82,17 @@ def main(args):
     # Process the dataset
     speaker_data = []
     for split in dataset:
-        # Group by speaker ID and get the first audio sample for each speaker
-        speakers = dataset[split].unique(args.speaker_column)
-        for speaker in tqdm(speakers, desc=f"Processing {split} split"):
-            speaker_samples = dataset[split].filter(lambda x: x[args.speaker_column] == speaker)
-            first_sample = speaker_samples[0]
-            
-            audio = first_sample[args.audio_column]
+        # Create a dictionary to store the first sample for each speaker
+        speaker_samples = defaultdict(list)
+        
+        # Iterate through the dataset once, collecting the first sample for each speaker
+        for sample in tqdm(dataset[split], desc=f"Collecting samples from {split} split"):
+            speaker_id = sample[args.speaker_column]
+            if not speaker_samples[speaker_id]:
+                speaker_samples[speaker_id] = sample[args.audio_column]
+        
+        # Process the collected samples
+        for speaker, audio in tqdm(speaker_samples.items(), desc=f"Processing {split} split"):
             prediction = predict_gender(audio, model, feature_extractor, device)
             speaker_data.append({"speaker_id": speaker, "sex": id2label[prediction]})
 
