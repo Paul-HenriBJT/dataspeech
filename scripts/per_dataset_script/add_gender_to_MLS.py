@@ -16,6 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("--repo_id", default=None, type=str, help="If specified, push the model to the hub.")
     parser.add_argument("--speaker_id_column_name", default="speaker_id", type=str, help="Audio column name.")
     parser.add_argument("--cpu_num_workers", default=1, type=int, help="Number of CPU workers for transformations that don't use GPUs or if no GPU are available.")
+    parser.add_argument("--hub_token", default=None, type=str, help="Hugging Face API token.")
 
     args = parser.parse_args()
     
@@ -43,7 +44,7 @@ if __name__ == "__main__":
         dataset.save_to_disk(args.output_dir)
     if args.repo_id:
         if args.configuration:
-            dataset.push_to_hub(args.repo_id, args.configuration)
+            dataset.push_to_hub(args.repo_id, args.configuration, token=args.hub_token)
         else:
-            dataset.push_to_hub(args.repo_id)
+            dataset.push_to_hub(args.repo_id, token=args.hub_token)
     
