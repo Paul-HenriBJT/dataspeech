@@ -36,12 +36,12 @@ def main(args):
         dataset.save_to_disk(args.output_dir)
         print(f"Dataset saved to {args.output_dir}")
 
-    if args.push_to_hub:
+    if args.repo_id:
         if args.configuration:
-            dataset.push_to_hub(args.push_to_hub, args.configuration, token=args.hub_token)
+            dataset.push_to_hub(args.repo_id, args.configuration, token=args.hub_token)
         else:
-            dataset.push_to_hub(args.push_to_hub, token=args.hub_token)
-        print(f"Dataset pushed to hub: {args.push_to_hub}")
+            dataset.push_to_hub(args.repo_id, token=args.hub_token)
+        print(f"Dataset pushed to hub: {args.repo_id}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Add gender column to dataset based on text classification.")
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     parser.add_argument("--configuration", type=str, default=None, help="Dataset configuration to use.")
     parser.add_argument("--text_column", type=str, default="text", help="Name of the column containing text for classification.")
     parser.add_argument("--output_dir", type=str, default=None, help="Directory to save the updated dataset.")
-    parser.add_argument("--push_to_hub", type=str, default=None, help="Repository name to push the dataset to the Hugging Face Hub.")
+    parser.add_argument("--repo_id", type=str, default=None, help="Repository name to push the dataset to the Hugging Face Hub.")
     parser.add_argument("--num_workers", type=str, default=1, help="Number of worker processes for dataset processing.")
     parser.add_argument("--hub_token", type=str, default=None, help="Hugging Face API token.")
 
