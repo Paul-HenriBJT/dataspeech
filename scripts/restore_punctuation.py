@@ -4,6 +4,9 @@ import argparse
 import torch
 from multiprocessing import set_start_method
 
+
+
+# WARNING: The use gpu does not work on nvidia (more investigation needed)
 def apply_punctuation(examples, model, text_column):
     restored_texts = [model.restore_punctuation(text) for text in examples[text_column]]
     return {
@@ -43,7 +46,7 @@ if __name__ == "__main__":
     elif args.language and args.language.lower() == "dutch":
         model = PunctuationModel(model="oliverguhr/fullstop-dutch-punctuation-prediction")
     else:
-        model = PunctuationModel(model=f"oliverguhr/fullstop-punctuation-multilang-large")
+        model = PunctuationModel(model=f"kredor/punctuate-all")
 
     # Determine the number of GPUs and workers
     num_gpus = torch.cuda.device_count() if args.use_gpu else 0
