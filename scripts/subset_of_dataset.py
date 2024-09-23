@@ -35,9 +35,9 @@ def create_dataset_subset(dataset_name, subset_percentage, config=None, min_dura
     return subset
 
 # Example usage
-dataset_name = "ylacombe/cml-tts"
-config = "french"  # Specify the config/subset if needed
-subset_percentage = 20  # Percentage of the original dataset size
+dataset_name = "parler-tts/mls_eng_10k"
+config = None  # Specify the config/subset if needed
+subset_percentage = 10  # Percentage of the original dataset size
 min_duration = 1.0  # Minimum duration in seconds
 buffer_percentage = 2.0  # Additional percentage to select initially
 
@@ -45,7 +45,7 @@ buffer_percentage = 2.0  # Additional percentage to select initially
 subset = create_dataset_subset(dataset_name, subset_percentage, config, min_duration, buffer_percentage)
 
 # Push the subset to the Hugging Face Hub
-new_dataset_name = f"cml-tts-{subset_percentage}percent-subset-min{min_duration}s"
+new_dataset_name = f"mls-eng-{subset_percentage}percent-subset-min{min_duration}s"
 for split in subset.keys():
     subset[split].push_to_hub(new_dataset_name, split=split)
 
