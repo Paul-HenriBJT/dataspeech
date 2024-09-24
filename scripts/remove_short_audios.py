@@ -41,7 +41,7 @@ if __name__ == "__main__":
     original_dataset = "ylacombe/cml-tts"
     new_dataset = "PHBJT/cml-tts"
     local_save_path = "./filtered_dataset"
-    dataset_subset = "spanish"  # Set to None if there's no specific subset
+    dataset_subset = "dutch"  # Set to None if there's no specific subset
     min_duration = 1  # Minimum duration in seconds
 
     filter_and_upload_dataset(original_dataset, new_dataset, local_save_path, subset=dataset_subset, min_duration=min_duration)
