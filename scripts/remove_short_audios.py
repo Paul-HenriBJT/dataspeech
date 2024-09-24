@@ -30,7 +30,10 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
     print(f"Filtered dataset saved locally at {local_path}")
 
     # Push the dataset to the Hugging Face Hub
-    filtered_dataset.push_to_hub(new_dataset_name)
+    if subset:
+        filtered_dataset.push_to_hub(new_dataset_name, subset)
+    else:
+        filtered_dataset.push_to_hub(new_dataset_name)
     print(f"Filtered dataset uploaded to Hugging Face Hub as {new_dataset_name}")
 
 if __name__ == "__main__":
