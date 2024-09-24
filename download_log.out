@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/Users/paul-henri/Documents/QS/save_dataset_locally.py", line 34, in <module>
+    download_and_save_dataset(dataset_name, save_directory)
+  File "/Users/paul-henri/Documents/QS/save_dataset_locally.py", line 7, in download_and_save_dataset
+    dataset = load_dataset(dataset_name)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/datasets/venv/lib/python3.12/site-packages/datasets/load.py", line 2606, in load_dataset
+    builder_instance = load_dataset_builder(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/datasets/venv/lib/python3.12/site-packages/datasets/load.py", line 2314, in load_dataset_builder
+    builder_instance: DatasetBuilder = builder_cls(
+                                       ^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/datasets/venv/lib/python3.12/site-packages/datasets/builder.py", line 374, in __init__
+    self.config, self.config_id = self._create_builder_config(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/paul-henri/Documents/QS/datasets/venv/lib/python3.12/site-packages/datasets/builder.py", line 586, in _create_builder_config
+    raise ValueError(
+ValueError: Config name is missing.
+Please pick one among the available configs: ['dutch', 'french', 'german', 'italian', 'polish', 'portuguese', 'spanish']
+Example of usage:
+	`load_dataset('ylacombe/cml-tts', 'dutch')`
