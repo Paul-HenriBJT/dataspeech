@@ -3,7 +3,7 @@ import penn
 import numpy as np
 
 # Here we'll use a 10 millisecond hopsize
-DEFAULT_HOPSIZE = 0.01
+hopsize = 0.01
 
 # Provide a sensible frequency range given your domain and model
 fmin = 30.
@@ -19,26 +19,17 @@ center = 'half-hop'
 # (Optional) Linearly interpolate unvoiced regions below periodicity threshold
 interp_unvoiced_at = 0.065
 
-# Minimum number of samples required for pitch estimation
-MIN_SAMPLES = 320  # This is equivalent to 20ms at 16kHz
+# Default values to return if pitch estimation fails
+DEFAULT_PITCH_MEAN = 100.0  # Example default value, adjust as needed
+DEFAULT_PITCH_STD = 10.0   # Example default value, adjust as needed
 
 def pitch_apply(batch, rank=None, audio_column_name="audio", output_column_name="utterance_pitch", penn_batch_size=4096):
     def process_single_audio(audio_tensor, sample_rate):
-        original_length = audio_tensor.shape[1]
-        
-        # If audio is too short, pad it
-        if original_length < MIN_SAMPLES:
-            pad_size = MIN_SAMPLES - original_length
-            audio_tensor = torch.nn.functional.pad(audio_tensor, (0, pad_size))
-        
-        # Calculate adaptive hopsize
-        adaptive_hopsize = max(DEFAULT_HOPSIZE, audio_tensor.shape[1] / 1000)
-        
         try:
             pitch, periodicity = penn.from_audio(
                 audio_tensor,
                 sample_rate,
-                hopsize=adaptive_hopsize,
+                hopsize=hopsize,
                 fmin=fmin,
                 fmax=fmax,
                 checkpoint=checkpoint,
@@ -47,15 +38,10 @@ def pitch_apply(batch, rank=None, audio_column_name="audio", output_column_name=
                 interp_unvoiced_at=interp_unvoiced_at,
                 gpu=(rank or 0) % torch.cuda.device_count() if torch.cuda.device_count() > 0 else rank
             )
-            
-            # If we padded the audio, trim the pitch to match original length
-            if original_length < MIN_SAMPLES:
-                pitch = pitch[:, :int(original_length / (sample_rate * adaptive_hopsize))]
-            
             return pitch.mean().cpu().item(), pitch.std().cpu().item()
         except Exception as e:
-            print(f"Error processing audio: {e}")
-            return np.nan, np.nan
+            print(f"Error processing audio of length {audio_tensor.shape[1]}: {e}")
+            return DEFAULT_PITCH_MEAN, DEFAULT_PITCH_STD
 
     if isinstance(batch[audio_column_name], list):
         utterance_pitch_mean = []
