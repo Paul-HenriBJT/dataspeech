@@ -44,7 +44,7 @@ def download_and_save_dataset(dataset_name, save_directory, configs=None, split=
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Download and save a dataset")
     parser.add_argument("dataset_name", type=str, help="Name of the dataset to download")
-    parser.add_argument("save_directory", type=str, help="Directory to save the dataset")
+    parser.add_argument("--save_directory", type=str, help="Directory to save the dataset")
     parser.add_argument("--configs", nargs='+', default=["all"], help="Configuration names for the dataset (use 'all' for all configs)")
     parser.add_argument("--split", type=str, default=None, help="Split of the dataset to download")
     parser.add_argument("--streaming", action="store_true", help="Whether to use streaming mode")
