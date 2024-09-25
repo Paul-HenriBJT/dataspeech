@@ -12,7 +12,7 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
         # Filter out rows where:
         # 1. text is just "." or "—"
         # 2. transcript_wav2vec is null
-        ds = ds.filter(lambda x: x['text'].strip() not in [".", "—"] and x['transcript_wav2vec'] is not None)
+        ds = ds.filter(lambda x: isinstance(x['text'], str) and x['text'].strip() not in [".", "—"] and x['transcript_wav2vec'] is not None)
 
         # Sort the dataset by duration
         sorted_indices = np.argsort(ds['duration'])
