@@ -90,7 +90,7 @@ if __name__ == "__main__":
     dataset_name = "PHBJT/cml-tts"  # This is now both the source and destination
     local_save_path = "./temp_cleaned_dataset"
     dataset_subset = "polish"  # Set to None if there's no specific subset
-    min_duration = 1  # Minimum duration in seconds
+    min_duration = 1.5  # Minimum duration in seconds
     text_column = "text"  # Replace with the actual name of your text column
 
     clean_and_update_dataset(dataset_name, local_save_path, subset=dataset_subset, min_duration=min_duration, text_column_name=text_column)
