@@ -9,6 +9,9 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
         dataset = load_dataset(dataset_name)
 
     def optimize_and_filter_dataset(ds):
+        # Filter out rows where text is just "." or "—"
+        ds = ds.filter(lambda x: x['text'].strip() not in [".", "—"])
+
         # Sort the dataset by duration
         sorted_indices = np.argsort(ds['duration'])
         ds = ds.select(sorted_indices)
@@ -41,7 +44,7 @@ if __name__ == "__main__":
     original_dataset = "ylacombe/cml-tts"
     new_dataset = "PHBJT/cml-tts-cleaned"
     local_save_path = "./filtered_dataset"
-    dataset_subset = "spanish"  # Set to None if there's no specific subset
+    dataset_subset = "polish"  # Set to None if there's no specific subset
     min_duration = 1.5  # Minimum duration in seconds
 
     filter_and_upload_dataset(original_dataset, new_dataset, local_save_path, subset=dataset_subset, min_duration=min_duration)
