@@ -11,24 +11,30 @@ def clean_and_update_dataset(dataset_name, local_path, subset=None, min_duration
         dataset = load_dataset(dataset_name)
 
     def clean_and_filter_dataset(ds):
+        print(f"Original dataset size: {len(ds)}")
+        
         def safe_process(example):
             try:
                 # Check if the text column exists and is a non-empty string
-                if text_column_name not in example or not isinstance(example[text_column_name], str) or len(example[text_column_name].strip()) == 0:
-                    print(f"Skipping entry with invalid or empty text: {example.get(text_column_name, 'N/A')}")
-                    return None
+                if text_column_name not in example:
+                    print(f"Text column '{text_column_name}' not found in example.")
+                    return example  # Keep the example, don't filter it out
+                if not isinstance(example[text_column_name], str):
+                    print(f"Text is not a string: {type(example[text_column_name])}")
+                    return example  # Keep the example, don't filter it out
+                if len(example[text_column_name].strip()) == 0:
+                    print("Text is empty after stripping whitespace.")
+                    return example  # Keep the example, don't filter it out
 
                 # If we get here, it means the entry is valid
                 return example
             except Exception as e:
                 print(f"Error processing entry: {e}")
-                return None
+                return example  # Keep the example, don't filter it out
 
         # Apply the safe_process function to each example
-        cleaned_ds = ds.map(safe_process, remove_columns=ds.column_names)
-
-        # Remove None entries (which are the problematic ones)
-        cleaned_ds = cleaned_ds.filter(lambda x: x is not None)
+        cleaned_ds = ds.map(safe_process, desc="Processing examples")
+        print(f"Dataset size after processing: {len(cleaned_ds)}")
 
         # Sort the dataset by duration if it exists
         if 'duration' in cleaned_ds.features:
@@ -39,14 +45,21 @@ def clean_and_update_dataset(dataset_name, local_path, subset=None, min_duration
             cut_off_index = np.searchsorted(cleaned_ds['duration'], min_duration)
 
             # Select only the part of the dataset where duration >= min_duration
-            return cleaned_ds.select(range(cut_off_index, len(cleaned_ds)))
+            cleaned_ds = cleaned_ds.select(range(cut_off_index, len(cleaned_ds)))
+            print(f"Dataset size after duration filtering: {len(cleaned_ds)}")
         else:
             print("Warning: 'duration' column not found. Skipping duration-based filtering.")
-            return cleaned_ds
+
+        return cleaned_ds
 
     # Clean and filter the dataset
     if isinstance(dataset, DatasetDict):
-        cleaned_dataset = DatasetDict({k: clean_and_filter_dataset(v) for k, v in dataset.items()})
+        cleaned_dataset = DatasetDict()
+        for k, v in dataset.items():
+            print(f"Processing split: {k}")
+            cleaned_split = clean_and_filter_dataset(v)
+            cleaned_dataset[k] = cleaned_split
+            print(f"Final size of split '{k}': {len(cleaned_split)}")
     else:
         cleaned_dataset = clean_and_filter_dataset(dataset)
 
