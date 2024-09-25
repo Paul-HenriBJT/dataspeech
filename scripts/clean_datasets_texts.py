@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # Replace these with your actual values
     dataset_name = "PHBJT/cml-tts"  # This is now both the source and destination
     local_save_path = "./temp_cleaned_dataset"
-    dataset_subset = "portuguese"  # Set to None if there's no specific subset
+    dataset_subset = "polish"  # Set to None if there's no specific subset
     min_duration = 1  # Minimum duration in seconds
     text_column = "text"  # Replace with the actual name of your text column
 
