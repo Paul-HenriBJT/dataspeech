@@ -43,7 +43,7 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
 
 if __name__ == "__main__":
     # Replace these with your actual values
-    original_dataset = "PHBJT/cml-tts-cleaned"
+    original_dataset = "ylacombe/cml-tts"
     new_dataset = "PHBJT/cml-tts-cleaned"
     local_save_path = "./filtered_dataset"
     dataset_subset = "german"  # Set to None if there's no specific subset
