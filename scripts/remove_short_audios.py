@@ -43,10 +43,10 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
 
 if __name__ == "__main__":
     # Replace these with your actual values
-    original_dataset = "ylacombe/cml-tts"
+    original_dataset = "PHBJT/cml-tts-cleaned"
     new_dataset = "PHBJT/cml-tts-cleaned"
     local_save_path = "./filtered_dataset"
-    dataset_subset = "polish"  # Set to None if there's no specific subset
+    dataset_subset = "portuguese"  # Set to None if there's no specific subset
     min_duration = 1.5  # Minimum duration in seconds
 
     filter_and_upload_dataset(original_dataset, new_dataset, local_save_path, subset=dataset_subset, min_duration=min_duration)
