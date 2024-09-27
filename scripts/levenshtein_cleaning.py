@@ -12,7 +12,7 @@ def filter_and_upload_dataset(dataset_name, new_dataset_name, local_path, subset
         # Filter out rows where:
         # 1. text is just "." or "—"
         # 2. transcript_wav2vec is null
-        ds = ds.filter(lambda x: x['levenshtein'] >= 0.9 and isinstance(x['levenshtein'], str))
+        ds = ds.filter(lambda x: x['levenshtein'] >= 0.9 and x['transcript_wav2vec'] is not None )
 
         # Sort the dataset by duration
         sorted_indices = np.argsort(ds['duration'])
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # Replace these with your actual values
     original_dataset = "ylacombe/cml-tts"
     new_dataset = "PHBJT/cml-tts-cleaned-levenshtein"
-    local_save_path = "./filtered_dataset_levenshtein"
+    local_save_path = "./filtered_dataset"
     dataset_subset = "portuguese"  # Set to None if there's no specific subset
     min_duration = 1  # Minimum duration in seconds
 
