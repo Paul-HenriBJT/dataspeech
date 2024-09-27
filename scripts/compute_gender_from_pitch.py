@@ -10,11 +10,11 @@ from collections import defaultdict
 
 def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5):
     if isinstance(audio, dict):
-        speech_array = torch.tensor(audio['array'], dtype=torch.float64)  # Convert to double precision
+        speech_array = torch.tensor(audio['array'], dtype=torch.float32)  # Use float32
         sr = audio['sampling_rate']
     else:
         speech_array, sr = torchaudio.load(audio)
-        speech_array = speech_array.to(torch.float64)  # Convert to double precision
+        speech_array = speech_array.to(torch.float32)  # Use float32
 
     # Ensure speech_array is 2D: (channels, time)
     if speech_array.dim() == 1:
@@ -26,13 +26,14 @@ def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5
 
     if sr != sampling_rate:
         transform = torchaudio.transforms.Resample(sr, sampling_rate)
+        transform = transform.to(speech_array.device)  # Ensure transform is on the same device
         speech_array = transform(speech_array)
 
     # Get the length of the audio
     len_audio = speech_array.shape[1]
 
     if len_audio < max_audio_len * sampling_rate:
-        padding = torch.zeros(1, max_audio_len * sampling_rate - len_audio, dtype=torch.float64)  # Use double precision
+        padding = torch.zeros(1, max_audio_len * sampling_rate - len_audio, dtype=torch.float32)  # Use float32
         speech_array = torch.cat([speech_array, padding], dim=1)
     else:
         speech_array = speech_array[:, :max_audio_len * sampling_rate]
