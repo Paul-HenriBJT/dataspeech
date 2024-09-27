@@ -10,10 +10,11 @@ from collections import defaultdict
 
 def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5):
     if isinstance(audio, dict):
-        speech_array = torch.tensor(audio['array'])
+        speech_array = torch.tensor(audio['array'], dtype=torch.float64)  # Convert to double precision
         sr = audio['sampling_rate']
     else:
         speech_array, sr = torchaudio.load(audio)
+        speech_array = speech_array.to(torch.float64)  # Convert to double precision
 
     # Ensure speech_array is 2D: (channels, time)
     if speech_array.dim() == 1:
@@ -31,7 +32,7 @@ def process_audio(audio, feature_extractor, sampling_rate=16000, max_audio_len=5
     len_audio = speech_array.shape[1]
 
     if len_audio < max_audio_len * sampling_rate:
-        padding = torch.zeros(1, max_audio_len * sampling_rate - len_audio)
+        padding = torch.zeros(1, max_audio_len * sampling_rate - len_audio, dtype=torch.float64)  # Use double precision
         speech_array = torch.cat([speech_array, padding], dim=1)
     else:
         speech_array = speech_array[:, :max_audio_len * sampling_rate]
