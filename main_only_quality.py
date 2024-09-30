@@ -57,7 +57,8 @@ if __name__ == "__main__":
                 "si-sdr": processed_audio_dataset[split]["sdr"],
                 "pesq": processed_audio_dataset[split]["pesq"]
             }
-            target_dataset[split] = target_dataset[split].add_columns(new_columns)
+            for col_name, col_data in new_columns.items():
+                target_dataset[split] = target_dataset[split].add_column(col_name, col_data)
 
     if args.output_dir:
         print("Saving to disk...")
